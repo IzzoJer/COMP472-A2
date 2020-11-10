@@ -45,7 +45,7 @@ class Puzzle:
         w = self.width
         h = self.height
 
-        if pos + w > len(self.getState()):
+        if pos + w >= len(self.getState()):
             self.__swap(pos, (pos+w)%w)
         else:
             self.__swap(pos, pos+w)
@@ -200,8 +200,6 @@ class Puzzle:
 puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
 # puzzle = Puzzle([5, 0, 8, 4, 2, 1, 7, 3, 6], 3, 3)
 puzzle.printState()
-print(puzzle.getManhattanDist())
-# print(puzzle.getFinal())
-# A.find_best(puzzle)
+A.find_best(puzzle)
 
 
