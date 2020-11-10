@@ -130,20 +130,29 @@ class Puzzle:
     def getManhattanDist(self):
         total_dist = 0
         puzzle = self.getState()
-        final = self.getFinal()
+        final_puzzle = self.getFinal()
+        w = self.width
         i=0
-        dist_row = 0
-        for tile in final:
-            j = 0
-            for t in puzzle:
-                if t == tile:
-                    dist_col = j%4 #width
-                    total_dist += dist_row + dist_col
-                    dist_row = 0
-                    break 
-                j += 1
-            i += 1
-            dist_row += 1 if i %2 == 0 else 0
+
+        for tile in puzzle:
+            if tile == 0:
+                i += 1
+                continue
+
+            row_pos = int(i/w)
+            col_pos = i % w
+
+            j = final_puzzle.index(tile)
+            
+            row_final = int(j/w)
+            col_final = j % w
+
+            dist_row = abs(row_pos - row_final)
+            dist_col = abs(col_pos - col_final)
+
+            print(f"Tile {tile}: {dist_row+dist_col}")
+            total_dist += dist_row + dist_col
+            i+= 1
 
         return total_dist
 
@@ -189,6 +198,7 @@ class Puzzle:
 
 
 puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
+# puzzle = Puzzle([5, 0, 8, 4, 2, 1, 7, 3, 6], 3, 3)
 puzzle.printState()
 print(puzzle.getManhattanDist())
 # print(puzzle.getFinal())
