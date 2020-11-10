@@ -8,6 +8,9 @@ class Puzzle:
         self.height = height
         self.width = width
         self.cost = 0
+        self.moveList = [] 
+        self.CostList = []
+        self.stateList = [] 
 
     #prints the curent state of the board
     def printState(self):
@@ -47,21 +50,25 @@ class Puzzle:
     #private function for swapping positions on the board
     def __swap(self, pos1, pos2):
         self.puzzle[pos1], self.puzzle[pos2] = self.puzzle[pos2], self.puzzle[pos1] 
+        if self.puzzle[pos1] == 0:
+            return self.puzzle[pos2]
+        else:
+            return self.puzzle[pos1]
 
     #swaps the 0 slot up or down and adds to cost
     def upVerticalMove(self):
         pos = self.puzzle.index(0)
         w = self.width
-
-        self.__swap(pos, pos-w)
         self.cost += 1
+        return self.__swap(pos, pos-w)
+        
 
     def downVerticalMove(self):
         pos = self.puzzle.index(0)
         w = self.width
-
-        self.__swap(pos, pos+w)
         self.cost += 1
+        return self.__swap(pos, pos+w)
+       
 
     #moves 0 left and adds 1 to cost, if 0 is on the left edge then it wraps around and cost += 2
     def leftHorizontalMove(self):
@@ -69,10 +76,12 @@ class Puzzle:
         w = self.width
 
         if pos % w == 0:
-            self.__swap(pos, pos + w - 1)
             self.cost += 2
+            return (self.__swap(pos, pos + w - 1),2)
+            
         else:
-            self.__swap(pos, pos-1)
+            self.cost += 1
+            return (self.__swap(pos, pos-1),2)
 
     #moves 0 right and adds 1 to cost, if 0 is on the right edge then it wraps around and cost += 2
     def rightHorizontalMove(self):
@@ -80,10 +89,12 @@ class Puzzle:
         w = self.width
 
         if pos % w == w - 1:
-            self.__swap(pos, pos - w + 1)
             self.cost += 2
+            return (self.__swap(pos, pos - w + 1),2)
+            
         else:
-            self.__swap(pos, pos+1)
+            self.cost += 1
+            return (self.__swap(pos, pos+1),1)
 
     #moves the 0 diag left if 0 is in one of the corners and adds 3 to cost
     def leftDiagMove(self):
@@ -95,18 +106,22 @@ class Puzzle:
         bottom_l = w*(h-1)
         top_r = w-1
         bottom_r = w*h-1
-
-        if pos == top_l:
-            self.__swap(pos, bottom_r)
-        elif pos == bottom_l:
-            self.__swap(pos, top_r)
-        elif pos == top_r:
-            self.__swap(pos, pos + w -1)
-        elif pos == bottom_l:
-            self.__swap(pos, pos - w -1)
         self.cost +=3
-
-
+        if pos == top_l:
+            return self.__swap(pos, bottom_r)
+        elif pos == bottom_l:
+            return self.__swap(pos, top_r)
+        elif pos == top_r:
+            return self.__swap(pos, pos + w -1)
+        elif pos == bottom_l:
+            return self.__swap(pos, pos - w -1)
+        
+    def getSolution(self):
+        out = []
+        for x in range(len(self.moveList)):
+            out.append([self.moveList[x], self.CostList[x], self.stateList[x]])
+        return out
+            
 
     ##moves the 0 diag right if 0 is in one of the corners and adds 3 to cost
     def rightDiagMove(self):
@@ -118,17 +133,17 @@ class Puzzle:
         bottom_l = w*(h-1)
         top_r = w-1
         bottom_r = w*h-1
-
-        if pos == top_l:
-            self.__swap(pos, pos + w + 1)
-        elif pos == bottom_l:
-            self.__swap(pos, pos - w + 1)
-        elif pos == top_r:
-            self.__swap(pos, bottom_l)
-        elif pos == bottom_r:
-            self.__swap(pos, top_l)
         self.cost += 3
 
+        if pos == top_l:
+            return self.__swap(pos, pos + w + 1)
+        elif pos == bottom_l:
+            return self.__swap(pos, pos - w + 1)
+        elif pos == top_r:
+            return self.__swap(pos, bottom_l)
+        elif pos == bottom_r:
+            return self.__swap(pos, top_l)
+        
     def getSumOfPermInv(self):
         count = 0 
         count2 = 0
@@ -171,7 +186,6 @@ class Puzzle:
 
                 total_dist[x] += dist_row + dist_col
                 i+= 1
-        print(total_dist[0], total_dist[1])
         return min(total_dist[0], total_dist[1])
 
 
@@ -211,17 +225,31 @@ class Puzzle:
 
     def move(self, direction):
         if direction == 'up':
-            self.upVerticalMove()
+            self.moveList.append(self.upVerticalMove())
+            self.CostList.append(1)
+            self.stateList.append(self.puzzle) 
         if direction == 'down':
-            self.downVerticalMove()
+            self.moveList.append(self.downVerticalMove())
+            self.CostList.append(1)
+            self.stateList.append(self.puzzle) 
         if direction == 'left':
-            self.leftHorizontalMove()
+            temp = self.leftHorizontalMove()
+            self.moveList.append(temp[0])
+            self.CostList.append(temp[1])
+            self.stateList.append(self.puzzle) 
         if direction == 'right':
-            self.rightHorizontalMove()
+            temp = self.rightHorizontalMove()
+            self.moveList.append(temp[0])
+            self.CostList.append(temp[1])
+            self.stateList.append(self.puzzle) 
         if direction == 'diagRight':
-            self.rightDiagMove()
+            self.moveList.append(self.rightDiagMove())
+            self.CostList.append(3)
+            self.stateList.append(self.puzzle) 
         if direction == 'diagLeft':
-            self.leftDiagMove()
+            self.moveList.append(self.leftDiagMove())
+            self.CostList.append(3)
+            self.stateList.append(self.puzzle) 
 
 # 3 0 1 4 2 6 5 7
 # 6 3 4 7 1 2 5 0
@@ -231,9 +259,8 @@ class Puzzle:
 
 # A.find_best(puzzle)
 
-#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
-puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
-#puzzle = Puzzle([5, 0, 8, 4, 2, 1, 7, 3, 6], 2, 3)
-puzzle.getManhattanDist()
-gbfs.gbfs(puzzle)
-
+puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
+#puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
+#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
+# print(gbfs.h2(puzzle))
+print(gbfs.h2(puzzle)[0])
