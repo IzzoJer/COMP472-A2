@@ -150,7 +150,6 @@ class Puzzle:
             dist_row = abs(row_pos - row_final)
             dist_col = abs(col_pos - col_final)
 
-            print(f"Tile {tile}: {dist_row+dist_col}")
             total_dist += dist_row + dist_col
             i+= 1
 
@@ -197,8 +196,8 @@ class Puzzle:
             self.leftDiagMove()
 
 
-puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
-# puzzle = Puzzle([5, 0, 8, 4, 2, 1, 7, 3, 6], 3, 3)
+# puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
+puzzle = Puzzle([5, 0, 8, 4, 2, 1, 7, 3, 6], 3, 3)
 puzzle.printState()
 A.find_best(puzzle)
 
