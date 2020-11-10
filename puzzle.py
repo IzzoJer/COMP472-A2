@@ -9,9 +9,9 @@ class Puzzle:
         self.height = height
         self.width = width
         self.cost = 0
-        self.moveList = [] 
-        self.CostList = []
-        self.stateList = [] 
+        self.moveList = [0] 
+        self.CostList = [0]
+        self.stateList = [copy.deepcopy(puzzle)] 
 
     #prints the curent state of the board
     def printState(self):
