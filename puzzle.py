@@ -1,4 +1,5 @@
 import a_star as A
+import gbfs
 
 class Puzzle:
     #initializes the game board 
@@ -25,7 +26,7 @@ class Puzzle:
 
     #return true if puzzle is completed 
     def isGoal(self):
-        if self.puzzle == self.getFinal():
+        if self.puzzle == self.getFinal()[0] or self.puzzle == self.getFinal()[1]:
             return True
         return False
 
@@ -33,7 +34,15 @@ class Puzzle:
     def getFinal(self):
         l = list(range(self.width * self.height))
         l.append(l.pop(0))
-        return l
+        l2 = []
+        for x in range(len(self.puzzle)):
+            if x % 2 != 0:
+                l2.append(x)
+        for x in range(len(self.puzzle)):
+            if x % 2 == 0:
+                l2.append(x)
+        l2.append(l2.pop(l2.index(0)))
+        return l, l2
 
     #private function for swapping positions on the board
     def __swap(self, pos1, pos2):
@@ -122,40 +131,48 @@ class Puzzle:
 
     def getSumOfPermInv(self):
         count = 0 
+        count2 = 0
         current = self.puzzle
-        for x in range(len(current)):
-            for y in range(x+1,len(current)):
-                if current[x] > current[y]:
+        for x in current:
+            remain = current[current.index(x)+1:]
+            f1 = self.getFinal()[0]
+            f2 = self.getFinal()[1]
+            f1 = f1[:f1.index(x)]
+            f2 = f2[:f2.index(x)]
+            for x in remain:
+                if x in f1:
                     count += 1
-        return count
+                if x in f2:
+                    count2 += 1
+        return min(count, count2)
 
     def getManhattanDist(self):
-        total_dist = 0
+        total_dist = [0,0]
         puzzle = self.getState()
-        final_puzzle = self.getFinal()
-        w = self.width
-        i=0
+        for x in range(2):
+            final_puzzle = self.getFinal()[x]
+            w = self.width
+            i=0
+            for tile in puzzle:
+                if tile == 0:
+                    i += 1
+                    continue
 
-        for tile in puzzle:
-            if tile == 0:
-                i += 1
-                continue
+                row_pos = int(i/w)
+                col_pos = i % w
 
-            row_pos = int(i/w)
-            col_pos = i % w
+                j = final_puzzle.index(tile)
+                
+                row_final = int(j/w)
+                col_final = j % w
 
-            j = final_puzzle.index(tile)
-            
-            row_final = int(j/w)
-            col_final = j % w
+                dist_row = abs(row_pos - row_final)
+                dist_col = abs(col_pos - col_final)
 
-            dist_row = abs(row_pos - row_final)
-            dist_col = abs(col_pos - col_final)
-
-            total_dist += dist_row + dist_col
-            i+= 1
-
-        return total_dist
+                total_dist[x] += dist_row + dist_col
+                i+= 1
+        print(total_dist[0], total_dist[1])
+        return min(total_dist[0], total_dist[1])
 
 
     def getMoves(self):
@@ -210,8 +227,13 @@ class Puzzle:
 # 6 3 4 7 1 2 5 0
 # 1 0 3 6 5 2 7 4
 # puzzle = Puzzle([1, 0, 3, 6, 5, 2, 7, 4], 2, 4)
-puzzle = Puzzle([5, 0 ,8, 4, 2, 1, 7, 3, 6], 3,3)
+# puzzle = Puzzle([5, 0 ,8, 4, 2, 1, 7, 3, 6], 3,3)
 
-A.find_best(puzzle)
+# A.find_best(puzzle)
 
+#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
+puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
+#puzzle = Puzzle([5, 0, 8, 4, 2, 1, 7, 3, 6], 2, 3)
+puzzle.getManhattanDist()
+gbfs.gbfs(puzzle)
 
