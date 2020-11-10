@@ -43,13 +43,15 @@ class Puzzle:
     def upVerticalMove(self):
         pos = self.puzzle.index(0)
         w = self.width
-        h = self.height
 
-        if pos + w >= len(self.getState()):
-            self.__swap(pos, (pos+w)%w)
-        else:
-            self.__swap(pos, pos+w)
+        self.__swap(pos, pos-w)
+        self.cost += 1
 
+    def downVerticalMove(self):
+        pos = self.puzzle.index(0)
+        w = self.width
+
+        self.__swap(pos, pos+w)
         self.cost += 1
 
     #moves 0 left and adds 1 to cost, if 0 is on the left edge then it wraps around and cost += 2
@@ -167,12 +169,19 @@ class Puzzle:
 
         moves = []
         moves.append(('up', 1))
+        moves.append(('down', 1))
+
+        if top_l <= pos <= top_r:
+            moves.remove(('up', 1))
+        elif bottom_l <= pos <= bottom_r:
+            moves.remove(('down', 1))
+
         if pos == top_l or pos == bottom_l:
             moves.append(('left', 2))
             moves.append(('diagLeft', 3))
             moves.append(('diagRight', 3))
         else:
-            moves.append(('Left', 1))
+            moves.append(('left', 1))
         if pos == top_r or pos == bottom_r:
             moves.append(('right', 2))
             moves.append(('diagLeft', 3))
@@ -186,6 +195,8 @@ class Puzzle:
     def move(self, direction):
         if direction == 'up':
             self.upVerticalMove()
+        if direction == 'down':
+            self.downVerticalMove()
         if direction == 'left':
             self.leftHorizontalMove()
         if direction == 'right':
@@ -195,10 +206,12 @@ class Puzzle:
         if direction == 'diagLeft':
             self.leftDiagMove()
 
+# 3 0 1 4 2 6 5 7
+# 6 3 4 7 1 2 5 0
+# 1 0 3 6 5 2 7 4
+# puzzle = Puzzle([1, 0, 3, 6, 5, 2, 7, 4], 2, 4)
+puzzle = Puzzle([5, 0 ,8, 4, 2, 1, 7, 3, 6], 3,3)
 
-# puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
-puzzle = Puzzle([5, 0, 8, 4, 2, 1, 7, 3, 6], 3, 3)
-puzzle.printState()
 A.find_best(puzzle)
 
 

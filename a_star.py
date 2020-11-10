@@ -39,16 +39,27 @@ def h_0(puzzle):
     return 1
 
 def h_1(puzzle):
-    return puzzle.getSumOfPermInv() 
+    return puzzle.getSumOfPermInv()
+
+def h_2(puzzle):
+    return puzzle.getManhattanDist()
+
+
 
 def contains(node, _list):
     state = node.current_state.getState()
 
-    for node in _list:
+    for _, node in _list:
         if node.current_state.getState() == state:
-            return True
+            return True, node.g
+    return False, -1
 
-    return False
+def replace(node, _list):
+    state = node.current_state.getState()
+
+    for i in range(len(_list)):
+        if _list[i][1].current_state.getState() == state:
+            _list[i] = (node.f, node)
 
 def add_to_open(open_list, node):
     for n in open_list:
@@ -57,9 +68,7 @@ def add_to_open(open_list, node):
     return True
 
 def is_goal(node):
-    goal = list(range(8))
-    goal.append(goal.pop(0))
-
+    goal = node.current_state.getFinal()
     return node.current_state.getState() == goal
 
 def print_moves(node):
@@ -78,29 +87,32 @@ def find_best(puzzle):
     closed_list = []
 
     node = Node(puzzle)
-    open_list.append(node)
+    hq.heappush(open_list, (0, node))
 
-    while open_list != []:
-        open_list.sort(key=lambda x: x.f)
-        current_node = open_list.pop(0)
-        closed_list.append(current_node)
+    while open_list:
+        f_cost, current_node = hq.heappop(open_list)
+        hq.heappush(closed_list, (f_cost, current_node))
 
         if is_goal(current_node):
             print(f"Found solution with cost of {current_node.g}")
             print_moves(current_node)
-            break
+            break;
 
         children = current_node.computeChildren()
 
         for child_node in children:
-            in_closed = contains(child_node, closed_list)
-            in_open = contains(child_node, open_list)
-
-            if not in_closed:
+            in_closed, _ = contains(child_node, closed_list)
+            in_open, open_cost = contains(child_node, open_list)
+            
+            if in_closed:
+                continue
+            elif not in_open:
                 child_node.g = current_node.g + child_node.movement_cost
-                child_node.h = h_1(child_node.current_state)
+                child_node.h = h_2(child_node.current_state)
                 child_node.f = child_node.g + child_node.h
-
-                if add_to_open(open_list, child_node):
-                    open_list.append(child_node)
-                    
+                hq.heappush(open_list, (child_node.f, child_node))
+            elif in_open and open_cost > current_node.g + child_node.movement_cost:
+                child_node.g = current_node.g + child_node.movement_cost
+                child_node.h = h_2(child_node.current_state)
+                child_node.f = child_node.g + child_node.h
+                replace(child_node, open_list)
