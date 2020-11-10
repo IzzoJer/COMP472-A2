@@ -1,5 +1,6 @@
 import a_star as A
 import gbfs
+import copy
 
 class Puzzle:
     #initializes the game board 
@@ -227,40 +228,28 @@ class Puzzle:
         if direction == 'up':
             self.moveList.append(self.upVerticalMove())
             self.CostList.append(1)
-            self.stateList.append(self.puzzle) 
+            self.stateList.append(copy.deepcopy(self.getCurrent())) 
         if direction == 'down':
             self.moveList.append(self.downVerticalMove())
             self.CostList.append(1)
-            self.stateList.append(self.puzzle) 
+            self.stateList.append(copy.deepcopy(self.getCurrent())) 
         if direction == 'left':
             temp = self.leftHorizontalMove()
             self.moveList.append(temp[0])
             self.CostList.append(temp[1])
-            self.stateList.append(self.puzzle) 
+            self.stateList.append(copy.deepcopy(self.getCurrent())) 
         if direction == 'right':
             temp = self.rightHorizontalMove()
             self.moveList.append(temp[0])
             self.CostList.append(temp[1])
-            self.stateList.append(self.puzzle) 
+            self.stateList.append(copy.deepcopy(self.getCurrent())) 
         if direction == 'diagRight':
             self.moveList.append(self.rightDiagMove())
             self.CostList.append(3)
-            self.stateList.append(self.puzzle) 
+            self.stateList.append(copy.deepcopy(self.getCurrent())) 
         if direction == 'diagLeft':
             self.moveList.append(self.leftDiagMove())
             self.CostList.append(3)
-            self.stateList.append(self.puzzle) 
+            self.stateList.append(copy.deepcopy(self.getCurrent())) 
 
-# 3 0 1 4 2 6 5 7
-# 6 3 4 7 1 2 5 0
-# 1 0 3 6 5 2 7 4
-# puzzle = Puzzle([1, 0, 3, 6, 5, 2, 7, 4], 2, 4)
-# puzzle = Puzzle([5, 0 ,8, 4, 2, 1, 7, 3, 6], 3,3)
 
-# A.find_best(puzzle)
-
-puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
-#puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
-#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
-# print(gbfs.h2(puzzle))
-print(gbfs.h2(puzzle)[0])
