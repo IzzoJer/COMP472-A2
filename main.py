@@ -6,10 +6,10 @@ import random
 
 # A.find_best(puzzle)
 
-puzzNum = 2
+#puzzNum = 2
 #puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
 #puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
-puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
+#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
 
 # gbfs_h0 = gbfs(puzzle, 0) 
 # gbfs_h1 = gbfs(puzzle, 1)
@@ -27,12 +27,12 @@ puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
 # out.searchFile(gbfs_h1[0], f'{puzzNum}_gbfs-h1_search')
 # out.solutionFile(gbfs_h2[1:], f'{puzzNum}_gbfs-h2_solution')
 # out.searchFile(gbfs_h2[0], f'{puzzNum}_gbfs-h2_search')
-#out.solutionFile(ucs(puzzle)[1:], f'{puzzNum}_ucs_solution')
-#out.searchFile(ucs(puzzle)[0], f'{puzzNum}_ucs_search')
+# out.solutionFile(ucs(puzzle)[1:], f'{puzzNum}_ucs_solution')
+# out.searchFile(ucs(puzzle)[0], f'{puzzNum}_ucs_search')
 
 #Analysis
 
-puzzles =[]
+puzzles = []
 with open('puzzles.txt', 'w')as f:
 	puzz = [1,2,3,4,5,6,7,0]
 	for x in range(50):
@@ -40,6 +40,41 @@ with open('puzzles.txt', 'w')as f:
 		f.write(str(puzz) + '\n')
 		puzzles.append(puzz)
 
-#for x in puzzles:
-#	p = Puzzle(x, 2, 4)
-#	ucs(p)
+
+total_length_solution =0
+total_length_search = 0
+total_nb_nosolution = 0
+total_cost = 0
+total_execution_time = 0
+
+for x in puzzles:
+	p = Puzzle(x, 2, 4)
+	output = ucs(p)
+
+	if(output != None):
+		total_length_search += len(output[0])
+		total_length_solution += len(output[1])
+		total_cost += output[2]
+		total_execution_time += output[3]
+	else:
+		total_nb_nosolution += 1
+
+average_length_solution = total_length_solution/50
+average_length_search = total_length_search/50
+average_nb_nosolution = total_nb_nosolution/50
+average_cost = total_cost/50
+average_execution_time = total_execution_time/50
+
+algo_name = 'ucs'
+with open(f'{algo_name}_analysis.txt', 'w')as f:
+	f.write(f'Total length of search: {total_length_search}\n')
+	f.write(f'Total length of solution: {total_length_solution}\n')
+	f.write(f'Total number of no solution: {total_nb_nosolution}\n')
+	f.write(f'Total cost: {total_cost}\n')
+	f.write(f'Total execution time: {total_execution_time}\n\n')
+
+	f.write(f'Average length of search: {average_length_search}\n')
+	f.write(f'Average length of solution: {average_length_solution}\n')
+	f.write(f'Average number of no solution: {average_nb_nosolution}\n')
+	f.write(f'Average cost: {average_cost}\n')
+	f.write(f'Average execution time: {average_execution_time}\n')
