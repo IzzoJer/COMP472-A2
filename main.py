@@ -1,12 +1,13 @@
 from puzzle import Puzzle
 from gbfs import gbfs
+from ucs import ucs
 import out
 import random
 
 # A.find_best(puzzle)
 
 puzzNum = 2
-#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)   
+#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
 #puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
 puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
 
@@ -27,8 +28,8 @@ puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
 # out.searchFile(gbfs_h1[0], f'{puzzNum}_gbfs-h1_search')
 # out.solutionFile(gbfs_h2[1:], f'{puzzNum}_gbfs-h2_solution')
 # out.searchFile(gbfs_h2[0], f'{puzzNum}_gbfs-h2_search')
-
-
+#out.solutionFile(ucs(puzzle)[1:], f'{puzzNum}_ucs_solution')
+#out.searchFile(ucs(puzzle)[0], f'{puzzNum}_ucs_search')
 
 #Analysis
 
@@ -45,5 +46,4 @@ with open('puzzles.txt', 'r')as f:
 		line.replace('[','')
 		puzzles.append(line.strip())
 
-for x in puzzles:
-	
+#for x in puzzles:

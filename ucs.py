@@ -1,15 +1,15 @@
 import copy
-from puzzle import Puzzle
+import time
 
 def ucs(puzzle):
-
+    start = time.time()
     open_list=[]
     open_list.append(puzzle)
     closed_list =[]
 
     while not open_list[0].isGoal():
-        #print(*open_list[0].puzzle)
-        closed_list.append(open_list[0])
+
+        closed_list.append([0,open_list[0].getTotCost(),0,open_list[0].getState()])
         moves = open_list[0].getMoves()
 
         for move in moves:
@@ -20,7 +20,10 @@ def ucs(puzzle):
 
         open_list.pop(0)
 
-    print(open_list[0].getSolution())
+        now = time.time()
+        if (now - start) > 60:
+            return
 
-puzzle = Puzzle([1,0,3,7,5,2,6,4],2,4)
-ucs(puzzle)
+    return closed_list, open_list[0].getSolution(),open_list[0].getTotCost(),now-start
+
+
