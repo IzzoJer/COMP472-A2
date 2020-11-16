@@ -87,7 +87,7 @@ def print_moves(node):
         print(n.current_state.printState())
         print('')
 
-def find_best(puzzle):
+def find_best(puzzle, h_i):
     open_list = []
     closed_list = []
 

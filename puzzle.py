@@ -122,7 +122,8 @@ class Puzzle:
         for x in range(len(self.moveList)):
             out.append([self.moveList[x], self.CostList[x], self.stateList[x]])
         return out
-            
+
+
 
     ##moves the 0 diag right if 0 is in one of the corners and adds 3 to cost
     def rightDiagMove(self):
@@ -144,6 +145,12 @@ class Puzzle:
             return self.__swap(pos, bottom_l)
         elif pos == bottom_r:
             return self.__swap(pos, top_l)
+
+    def h_0(self):
+        if self.getState()[-1] == 0:
+            return 0
+        else:
+            return 1
         
     def getSumOfPermInv(self):
         count = 0 
