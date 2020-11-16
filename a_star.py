@@ -1,5 +1,6 @@
 from copy import deepcopy
 import heapq as hq
+import time
 
 class Node:
 
@@ -68,8 +69,12 @@ def add_to_open(open_list, node):
     return True
 
 def is_goal(node):
-    goal = node.current_state.getFinal()
-    return node.current_state.getState() == goal
+    g1, g2 = node.current_state.getFinal()
+    state = node.current_state.getState()
+    if state == g1 or state == g2:
+        return True
+    else:
+        return False
 
 def print_moves(node):
     out = []
@@ -89,18 +94,27 @@ def find_best(puzzle):
     node = Node(puzzle)
     hq.heappush(open_list, (0, node))
 
+    search_path = []#f g, h, puzzle state
+    t0 = time.time()
+
     while open_list:
         f_cost, current_node = hq.heappop(open_list)
+        search_path.append([f_cost, current_node.g, current_node.h, current_node.current_state.getState()])
         hq.heappush(closed_list, (f_cost, current_node))
 
         if is_goal(current_node):
             print(f"Found solution with cost of {current_node.g}")
-            print_moves(current_node)
-            break;
+            goal = current_node
+            break
 
         children = current_node.computeChildren()
 
         for child_node in children:
+            t1 = time.time()
+            # if t1 - t0 >= 60:
+            #     print("Did not find a solution under 60 seconds")
+            #     return
+
             in_closed, _ = contains(child_node, closed_list)
             in_open, open_cost = contains(child_node, open_list)
             
@@ -116,3 +130,6 @@ def find_best(puzzle):
                 child_node.h = h_2(child_node.current_state)
                 child_node.f = child_node.g + child_node.h
                 replace(child_node, open_list)
+
+    t1 = time.time()
+    return search_path, goal.current_state.getSolution(), goal.current_state.getTotCost(), t1 - t0
