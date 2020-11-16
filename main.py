@@ -4,6 +4,7 @@ from ucs import ucs
 import out
 import random
 import a_star
+import json
 
 # A.find_best(puzzle)
 
@@ -30,27 +31,27 @@ puzzle3 = Puzzle([1, 0, 3, 6, 5, 2, 7, 4], 2, 4)
 # out.searchFile(gbfs_h2[0], f'{puzzNum}_gbfs-h2_search')
 
 #UCS algo output files
-ucs_outputs =[]
-ucs_outputs.append(ucs(puzzle1))
-ucs_outputs.append(ucs(puzzle2))
-ucs_outputs.append(ucs(puzzle3))
+# ucs_outputs =[]
+# ucs_outputs.append(ucs(puzzle1))
+# ucs_outputs.append(ucs(puzzle2))
+# ucs_outputs.append(ucs(puzzle3))
 
-for i, output in enumerate(ucs_outputs):
-	if output is None:
-		out.solutionFile(output, f'{i}_ucs_solution')
-		out.searchFile(output, f'{i}_ucs_search')
-	else:
-		out.solutionFile(output[1:], f'{i}_ucs_solution')
-		out.searchFile(output[0], f'{i}_ucs_search')
+# for i, output in enumerate(ucs_outputs):
+# 	if output is None:
+# 		out.solutionFile(output, f'{i}_ucs_solution')
+# 		out.searchFile(output, f'{i}_ucs_search')
+# 	else:
+# 		out.solutionFile(output[1:], f'{i}_ucs_solution')
+# 		out.searchFile(output[0], f'{i}_ucs_search')
 
 
 #Analysis
 
 puzzles = []
-nb_puzzles = 0
-with open('puzzles.txt', 'w')as f:
-	puzzles = f.readLines()
-
+with open('puzzles.txt', 'r') as f:
+	puzzles = [json.loads(line) for line in f]
+nb_puzzles = len(puzzles)
+print(puzzles)
 
 total_length_solution =0
 total_length_search = 0
@@ -60,7 +61,7 @@ total_execution_time = 0
 
 for x in puzzles:
 	p = Puzzle(x, 2, 4)
-	output = a_star.find_best(p, 1)
+	output = a_star.find_best(p, 2)
 
 	if(output != None):
 		total_length_search += len(output[0])
