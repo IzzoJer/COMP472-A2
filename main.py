@@ -61,7 +61,7 @@ total_execution_time = 0
 
 for x in puzzles:
 	p = Puzzle(x, 2, 4)
-	output = a_star.find_best(p, 2)
+	output = ucs(p)
 
 	if(output != None):
 		total_length_search += len(output[0])
@@ -77,7 +77,7 @@ average_nb_nosolution = total_nb_nosolution/nb_puzzles
 average_cost = total_cost/nb_puzzles
 average_execution_time = total_execution_time/nb_puzzles
 
-algo_name = 'astar'
+algo_name = 'ucs'
 with open(f'{algo_name}_analysis.txt', 'w')as f:
 	f.write(f'Total length of search: {total_length_search}\n')
 	f.write(f'Total length of solution: {total_length_solution}\n')
