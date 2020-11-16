@@ -6,10 +6,10 @@ import random
 
 # A.find_best(puzzle)
 
-puzzNum = 2
-puzzle = Puzzle([3, 0, 1, 4, 2, 6, 5, 7],2, 4)
-#puzzle = Puzzle([6, 3, 4, 7, 1, 2, 5, 0], 2, 4)
-#puzzle = Puzzle([1, 0, 3, 6, 5, 2, 7, 4], 2, 4)
+puzzNum = 0
+puzzle1 = Puzzle([3, 0, 1, 4, 2, 6, 5, 7],2, 4)
+puzzle2 = Puzzle([6, 3, 4, 7, 1, 2, 5, 0], 2, 4)
+puzzle3 = Puzzle([1, 0, 3, 6, 5, 2, 7, 4], 2, 4)
 
 # gbfs_h0 = gbfs(puzzle, 0) 
 # gbfs_h1 = gbfs(puzzle, 1)
@@ -27,13 +27,25 @@ puzzle = Puzzle([3, 0, 1, 4, 2, 6, 5, 7],2, 4)
 # out.searchFile(gbfs_h1[0], f'{puzzNum}_gbfs-h1_search')
 # out.solutionFile(gbfs_h2[1:], f'{puzzNum}_gbfs-h2_solution')
 # out.searchFile(gbfs_h2[0], f'{puzzNum}_gbfs-h2_search')
-#out.solutionFile(ucs(puzzle)[1:], f'{puzzNum}_ucs_solution')
-#out.searchFile(ucs(puzzle)[0], f'{puzzNum}_ucs_search')
+
+#UCS algo output files
+ucs_outputs =[]
+ucs_outputs.append(ucs(puzzle1))
+ucs_outputs.append(ucs(puzzle2))
+ucs_outputs.append(ucs(puzzle3))
+
+for i, output in enumerate(ucs_outputs):
+	if output is None:
+		out.solutionFile(output, f'{i}_ucs_solution')
+	else:
+		out.solutionFile(output[1:], f'{i}_ucs_solution')
+		out.searchFile(output[0], f'{i}_ucs_search')
+
 
 #Analysis
 
 puzzles = []
-nb_puzzles = 50
+nb_puzzles = 0
 with open('puzzles.txt', 'w')as f:
 	puzz = [1,2,3,4,5,6,7,0]
 	for x in range(nb_puzzles):
