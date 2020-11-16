@@ -39,6 +39,9 @@ def h_0(puzzle):
 
     return 1
 
+def h_0(puzzle):
+    return puzzle.h_0()
+
 def h_1(puzzle):
     return puzzle.getSumOfPermInv()
 
@@ -91,6 +94,14 @@ def find_best(puzzle, h_i):
     open_list = []
     closed_list = []
 
+    if h_i == 0:
+        h = h_0
+    elif h_i == 1:
+        h = h_1
+    else:
+        h = h_2
+
+
     node = Node(puzzle)
     hq.heappush(open_list, (0, node))
 
@@ -111,9 +122,9 @@ def find_best(puzzle, h_i):
 
         for child_node in children:
             t1 = time.time()
-            # if t1 - t0 >= 60:
-            #     print("Did not find a solution under 60 seconds")
-            #     return
+            if t1 - t0 >= 60:
+                print("Did not find a solution under 60 seconds")
+                return
 
             in_closed, _ = contains(child_node, closed_list)
             in_open, open_cost = contains(child_node, open_list)
@@ -122,12 +133,12 @@ def find_best(puzzle, h_i):
                 continue
             elif not in_open:
                 child_node.g = current_node.g + child_node.movement_cost
-                child_node.h = h_2(child_node.current_state)
+                child_node.h = h(child_node.current_state)
                 child_node.f = child_node.g + child_node.h
                 hq.heappush(open_list, (child_node.f, child_node))
             elif in_open and open_cost > current_node.g + child_node.movement_cost:
                 child_node.g = current_node.g + child_node.movement_cost
-                child_node.h = h_2(child_node.current_state)
+                child_node.h = h(child_node.current_state)
                 child_node.f = child_node.g + child_node.h
                 replace(child_node, open_list)
 
