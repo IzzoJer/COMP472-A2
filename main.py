@@ -37,6 +37,7 @@ ucs_outputs.append(ucs(puzzle3))
 for i, output in enumerate(ucs_outputs):
 	if output is None:
 		out.solutionFile(output, f'{i}_ucs_solution')
+		out.searchFile(output, f'{i}_ucs_search')
 	else:
 		out.solutionFile(output[1:], f'{i}_ucs_solution')
 		out.searchFile(output[0], f'{i}_ucs_search')
