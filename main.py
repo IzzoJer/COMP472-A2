@@ -7,9 +7,9 @@ import random
 # A.find_best(puzzle)
 
 puzzNum = 2
-puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
-#puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
-#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
+puzzle = Puzzle([3, 0, 1, 4, 2, 6, 5, 7],2, 4)
+#puzzle = Puzzle([6, 3, 4, 7, 1, 2, 5, 0], 2, 4)
+#puzzle = Puzzle([1, 0, 3, 6, 5, 2, 7, 4], 2, 4)
 
 # gbfs_h0 = gbfs(puzzle, 0) 
 # gbfs_h1 = gbfs(puzzle, 1)
@@ -33,7 +33,7 @@ puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
 #Analysis
 
 puzzles = []
-nb_puzzles = 0
+nb_puzzles = 50
 with open('puzzles.txt', 'w')as f:
 	puzz = [1,2,3,4,5,6,7,0]
 	for x in range(nb_puzzles):
