@@ -6,8 +6,8 @@ import random
 
 # A.find_best(puzzle)
 
-#puzzNum = 2
-#puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
+puzzNum = 2
+puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4],2, 4)
 #puzzle = Puzzle([0, 3, 1, 4, 2, 6, 5, 7], 2, 4)
 #puzzle = Puzzle([1, 0, 3, 7, 5, 2, 6, 4], 2, 4)
 
@@ -27,15 +27,16 @@ import random
 # out.searchFile(gbfs_h1[0], f'{puzzNum}_gbfs-h1_search')
 # out.solutionFile(gbfs_h2[1:], f'{puzzNum}_gbfs-h2_solution')
 # out.searchFile(gbfs_h2[0], f'{puzzNum}_gbfs-h2_search')
-# out.solutionFile(ucs(puzzle)[1:], f'{puzzNum}_ucs_solution')
-# out.searchFile(ucs(puzzle)[0], f'{puzzNum}_ucs_search')
+out.solutionFile(ucs(puzzle)[1:], f'{puzzNum}_ucs_solution')
+out.searchFile(ucs(puzzle)[0], f'{puzzNum}_ucs_search')
 
 #Analysis
 
 puzzles = []
+nb_puzzles = 0
 with open('puzzles.txt', 'w')as f:
 	puzz = [1,2,3,4,5,6,7,0]
-	for x in range(50):
+	for x in range(nb_puzzles):
 		random.shuffle(puzz)
 		f.write(str(puzz) + '\n')
 		puzzles.append(puzz)
@@ -59,11 +60,11 @@ for x in puzzles:
 	else:
 		total_nb_nosolution += 1
 
-average_length_solution = total_length_solution/50
-average_length_search = total_length_search/50
-average_nb_nosolution = total_nb_nosolution/50
-average_cost = total_cost/50
-average_execution_time = total_execution_time/50
+average_length_solution = total_length_solution/nb_puzzles
+average_length_search = total_length_search/nb_puzzles
+average_nb_nosolution = total_nb_nosolution/nb_puzzles
+average_cost = total_cost/nb_puzzles
+average_execution_time = total_execution_time/nb_puzzles
 
 algo_name = 'ucs'
 with open(f'{algo_name}_analysis.txt', 'w')as f:
