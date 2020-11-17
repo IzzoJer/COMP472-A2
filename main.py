@@ -70,10 +70,11 @@ for x in puzzles:
 		total_execution_time += output[3]
 	else:
 		total_nb_nosolution += 1
+		nb_puzzles -= 1
 
 average_length_solution = total_length_solution/nb_puzzles
 average_length_search = total_length_search/nb_puzzles
-average_nb_nosolution = total_nb_nosolution/nb_puzzles
+average_nb_nosolution = total_nb_nosolution/50
 average_cost = total_cost/nb_puzzles
 average_execution_time = total_execution_time/nb_puzzles
 
